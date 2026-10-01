@@ -1,0 +1,28 @@
+9 print "c64 roms ripper by the alien/lv-426 bbs"
+10 print "this program reads the c64 kernal, basic, and character set roms"
+11 print "and saves them to disk"
+13 poke52,48:poke 56,48:clr
+14 gosub 400
+20 input "drive# to write out roms to:";do
+25 s=57344:r=65535:fo$="kernal":gosub 290
+26 s=40960:r=49151:fo$="basic":gosub 290
+27 s=12288:r=16383:fo$="charset":gosub 290
+28 print "done!":end
+290 print "writing output file ";fo$
+291 open 8,do,8,"@0:"+fo$+",s,w"
+292 for i=s to r
+293 print"writing ";i;" to ";r
+294 print"‘";
+295 a=peek(i):print#8,chr$(a);
+296 next i
+297 close 8
+298 print
+370 return
+400 printchr$(142)
+401 print "relocating character rom - please wait"
+402 poke56334,peek(56334)and254
+403 poke1,peek(1)and251
+404 fori=0to4095:pokei+12288,peek(i+53248):next
+405 poke1,peek(1)or4
+406 poke56334,peek(56334)or1
+407 return
